@@ -1,0 +1,56 @@
+1. who am i?
+(picture of me)
+
+  Matthew Rudy
+  马泰
+  
+2. I have ear hair
+
+  (but I don't have time to talk about that)
+
+3. Why is finance different?
+(fat banker vs fat coder)
+
+  Smaller User Base
+
+  Less about being pretty
+
+  "If you f**k up, you're f**ked"
+
+  ... but ... you may have all night to fix it
+
+4. Key approaches
+
+  Data Integrity
+  State Machines
+  Audit
+  Pessimistic Locking
+  Currency
+  Ledgers
+  Rounding
+  System Security
+  Data Security
+
+5. Postgres
+
+  Sounds enterprise
+  CHECK constraints
+  Partial Indexes
+  Encryption
+
+6. State Machines
+
+  Everything is a process
+  A loan can only be disbursed once
+
+7. Audit
+
+  We need to know who did what
+  and when
+
+8. Pessimistic Locking
+
+  If something goes wrong
+  I f**ked up
+  I need to fix it
+
