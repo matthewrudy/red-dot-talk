@@ -31,26 +31,84 @@
   System Security
   Data Security
 
-5. Postgres
+5. Data Integrity
 
-  Sounds enterprise
+  Foreign Keys
   CHECK constraints
   Partial Indexes
   Encryption
+  
+  (I suggest you use Postgres)
 
 6. State Machines
 
-  Everything is a process
-  A loan can only be disbursed once
+  Everything is a process!
+  
+  A loan must only be disbursed once!
+  A payment must only be made once!
+  We must only refund someone once!
+  
+  class SomeProcess < ActiveRecord::Base
+    super_state :pending, :initial => true
+    super_state :processing
+    super_state :completed
+    super_state :failed
 
-7. Audit
-
-  We need to know who did what
-  and when
-
-8. Pessimistic Locking
+    super_state_group :outstanding, ["pending", "processing"]
+  end
+  
+  https://github.com/matthewrudy/super_state
+  
+7. Pessimistic Locking
 
   If something goes wrong
   I f**ked up
   I need to fix it
+  
+  class SomeProcess < ActiveRecord::Base
+    # kick of the process
+    state_transition :start_processing, :pending => :processing
+
+    # finish it off
+    state_transition :complete_processing, :processing => :completed
+    
+    def process!
+      ensure_super_state!(:pending) do
+        self.start_processing!
+      end
+      
+      # do our stuff
+      
+      complete_processing!
+    end
+  end
+    
+
+8. Audit
+
+  We need to know who did what
+  and when
+  
+  def audit_this!
+    ActionAudit.audit!(
+      :ip => request.remote_ip,
+      :controller => params[:controller],
+      :action     => params[:action],
+      :params     => request.filtered_parameters,
+      :flash      => flash,
+      :status     => status,
+      :http_verb  => request.request_method,
+      :user       => current_user
+      )
+  rescue Exception => e
+    logger.error("Auditing is broken: #{e.message}")
+  end
+  
+  after_filter :audit_this
+
+
+
+  example:
+      
+9. Currency
 
