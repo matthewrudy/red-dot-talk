@@ -1,14 +1,14 @@
-1. who am i?
+Who am i?
 (picture of me)
 
   Matthew Rudy
   马泰
   
-2. I have ear hair
+I have ear hair
 
   (but I don't have time to talk about that)
 
-3. Why is finance different?
+Why is finance different?
 (fat banker vs fat coder)
 
   Smaller User Base
@@ -19,19 +19,20 @@
 
   ... but ... you may have all night to fix it
 
-4. Key approaches
+10 Key approaches
 
-  Data Integrity
-  State Machines
-  Audit
-  Pessimistic Locking
-  Currency
-  Ledgers
-  Rounding
-  System Security
-  Data Security
-
-5. Data Integrity
+  1. Data Integrity
+  2. State Machines
+  3. Pessimistic Locking
+  4. Audit
+  5. Currency
+  6. Ledgers
+  7. Rounding
+  8. System Security
+  9. Data Security
+  10. ?
+  
+1. Data Integrity
 
   Foreign Keys
   CHECK constraints
@@ -40,7 +41,7 @@
   
   (I suggest you use Postgres)
 
-6. State Machines
+2. State Machines
 
   Everything is a process!
   
@@ -59,7 +60,7 @@
   
   https://github.com/matthewrudy/super_state
   
-7. Pessimistic Locking
+3. Pessimistic Locking
 
   If something goes wrong
   I f**ked up
@@ -84,7 +85,7 @@
   end
     
 
-8. Audit
+4. Audit
 
   We need to know who did what
   and when
@@ -105,10 +106,53 @@
   end
   
   after_filter :audit_this
+  
+5. Currency
 
+  Do we store as Float, Decimal, or Integer?
+  
+  100_000.00 US Dollars
+   50_000.00 British Pounds
+  600_000.00 Hong Kong Dollars
+  
+   1_000_000  Korean Won?
+  
+  We have to store it as an Integer.
+  
+  Integer plus Currency Code.
+  
+7. Rounding
 
+  (picture from that film)
+  
+8. System Security
 
-  example:
-      
-9. Currency
+  Let someone else do the work!
+  
+  User permissioning
+  * Devise
+  * CanCan
+  * strong passwords
+  
+  Firewall
+  * different IP address for SSH access
+  * whitelist IP addresses for SSH access
+  * non-standard port for SSH access
+  
+  Chef
+  * creates user accounts
+  * configures SSH security (no root login, no passwords)
+  * configures Postgres security (access limited to local ips, specific users, and specific databases)
+  * only run the services we need
+  
+9. Data Security
 
+  Don't leave your laptop on the train!
+  
+  If you don't have the data on your machine
+  you can't lose it.
+  
+  Rules
+  * no client data outside the data centre
+  * local development uses obfuscated data
+  
