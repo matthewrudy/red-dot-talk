@@ -24,7 +24,7 @@
 	
 	<style type="text/css">
 	  .slide pre {
-	    font-size : 80%;
+	    font-size : 0.7em;
 	  }
 	  h1 {
 	    font-size : 2.5em;
@@ -53,8 +53,8 @@
 	  <h1>Who Am I?</h1>
 	  <ul>
 	    <li class="incremental">Matthew Rudy Jacobs</li>
-	    <li class="incremental">MatthewRudy</li>
 	    <li class="incremental">马泰</li>
+	    <li class="incremental">@MatthewRudy</li>
 	  </ul>
 	</div>
 	
@@ -79,15 +79,11 @@
 	<div class="slide">
     <h1>Why is finance different?</h1>
     <h2 class="incremental">Surely its just building internal apps</h2>
-    <h2 class="incremental">Boring!</h2>
+    <h2 class="incremental">Isn't that boring?</h2>
   </div>
   
   <div class="slide">
     <h1>Yes</h1>
-    <ul>
-      <li class="incremental">Its boring</li>
-      <li class="incremental">Its soulless</li>
-    </ul>
   </div>
   
   <div class="slide">
@@ -96,14 +92,9 @@
       <li class="incremental">Small User Base</li>
       <li class="incremental">Function over Form</li>
       <li class="incremental">Its all about numbers</li>
+      <li class="incremental">No f**k ups</li>
     </ul>
   </div>
-  
-  <div class="slide">
-    <h1>If you f**k up, you're f**ked</h1>
-    <p class="incremental">But they only work 9-5</p>
-  </div>
-  
   
   <div class="slide">
     <h2>10 Key approaches</h2>
@@ -131,12 +122,28 @@
   
   <div class="slide">
     <h1>1. Data Integrity</h1>
+    <h2>Its the the Data that Matters</h2>
   </div>
   
   <div class="slide">
     <h1>Foreign Keys</h1>
     
     <p class="incremental">If Direct Debit Request 45623 doesn't exist, something has gone wrong!</p>
+  </div>
+  
+  <div class="slide">
+    <h1>Unique Indexes</h1>
+    
+    <p class="incremental">There can only be one "disbursed" Loan per client</p>
+  </div>
+  
+  <div class="slide">
+    <h2>I'd like to say</h2>
+    <ul>
+      <li class="incremental">CHECK constraints</li>
+      <li class="incremental">Partial Indexes</li>
+    </ul>
+    <p class="incremental">But these get in the way</p>
   </div>
   
   <div class="slide">
@@ -176,10 +183,12 @@ end
     <pre>
 class SomeProcess < ActiveRecord::Base
   # kick of the process
-  state_transition :start_processing, :pending => :processing
+  state_transition :start_processing,
+    :pending => :processing
 
   # finish it off
-  state_transition :complete_processing, :processing => :completed
+  state_transition :complete_processing,
+    :processing => :completed
 
   def process!
     ensure_super_state!(:pending) do
@@ -202,16 +211,22 @@ end
       <li class="incremental">Do your work!</li>
     </ul>
   </div>
+  
+  <div class="slide">
+    <h1>If it fails?</h1>
+    <ul>
+      <li class="incremental">Something unexpected has happened</li>
+      <li class="incremental">We need to fix it manually</li>
+    </ul>
+  </div>
 
   <div class="slide">
     <h1>4. Audit Everything</h1>
+    <h2>Who did what, when?</h2>
   </div>
   
   <div class="slide">
-    <h2>We need to know who did what and when</h2>
-  </div>
-  
-  <div class="slide">
+    <h2>Just do it</h2>
     <pre class="brush: ruby">
 def audit_this!
   ActionAudit.audit!(
