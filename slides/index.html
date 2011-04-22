@@ -24,7 +24,10 @@
 	
 	<style type="text/css">
 	  .slide pre {
-	    font-size : 90%;
+	    font-size : 80%;
+	  }
+	  h1 {
+	    font-size : 2.5em;
 	  }
 	</style>
 
@@ -134,7 +137,7 @@
   </div>
   
   <div class="slide">
-    <h1>State Machines</h1>
+    <h1>2. State Machines</h1>
    
   </div>
   <div class="slide"> 
@@ -162,7 +165,35 @@ end
   </div>
   
   <div class="slide">
+    <h1>3. Pessimistic Locking</h1>
     
+    <h2>Keep your hands off my task</h2>
+  </div>
+    
+  <div class="slide">
+    <pre>
+class SomeProcess < ActiveRecord::Base
+  # kick of the process
+  state_transition :start_processing, :pending => :processing
+
+  # finish it off
+  state_transition :complete_processing, :processing => :completed
+
+  def process!
+    ensure_super_state!(:pending) do
+      self.start_processing!
+    end
+
+    # do our stuff
+
+    complete_processing!
+  end
+end
+    </pre>
+  </div>
+  <h2>If something goes wrong,
+      I made a mistake,
+      I need to fix it
   <ul>
       <li class="incremental">Foreign Keys</li>
       <li class="incremental">CHECK constraints</li>
@@ -171,44 +202,7 @@ end
       <li class="incremental">10. ?</li>
     </ul>
   </div>
-  1. Data Integrity
-    2. State Machines
-    3. Pessimistic Locking
-    4. Audit
-    5. Currency
-    6. Ledgers
-    7. Rounding
-    8. System Security
-    9. Data Security
-    10. ?
-
-  1. Data Integrity
-
-    Foreign Keys
-    CHECK constraints
-    Partial Indexes
-    Encryption
-
-    (I suggest you use Postgres)
-
-  2. State Machines
-
-    Everything is a process!
-
-    A loan must only be disbursed once!
-    A payment must only be made once!
-    We must only refund someone once!
-
-    class SomeProcess < ActiveRecord::Base
-      super_state :pending, :initial => true
-      super_state :processing
-      super_state :completed
-      super_state :failed
-
-      super_state_group :outstanding, ["pending", "processing"]
-    end
-
-    https://github.com/matthewrudy/super_state
+  
 
   3. Pessimistic Locking
 
