@@ -32,6 +32,9 @@
 	  li {
 	    padding : 0.5em 0;
 	  }
+	  #background {
+	    color : #333;
+	  }
 	</style>
 
 	<!-- Slippy init code -->
@@ -59,10 +62,6 @@
 	
 	<div class="slide">
 	  <h1>I'm not a Pivot!</h1>
-	</div>
-	
-	<div class="slide">
-	  <h1>But I may be a Pervert!</h1>
 	</div>
 	
 	<div class="slide">
@@ -97,6 +96,15 @@
   </div>
   
   <div class="slide">
+    <h2>We lend money</h2>
+    <ul>
+      <li class="incremental">to small businesses</li>
+      <li class="incremental">with proven cash flow</li>
+    </ul>
+    <h2 class="incremental">We take daily payments</h2>
+  </div>
+  
+  <div class="slide">
     <h2>Risk Analysis</h2>
     <ul>
       <li class="incremental">6 months credit card statements</li>
@@ -125,34 +133,13 @@
     <h1>Key features</h1>
     <ul>
       <li class="incremental">Small User Base</li>
-      <li class="incremental">Function over Form</li>
       <li class="incremental">Its all about numbers</li>
       <li class="incremental">No f**k ups</li>
     </ul>
   </div>
   
   <div class="slide">
-    <h2>10 Key approaches</h2>
-    
-    <ul>
-      <li class="incremental">1. Data Integrity</li>
-      <li class="incremental">2. State Machines</li>
-      <li class="incremental">3. Pessimistic Locking</li>
-      <li class="incremental">4. Audit Everything</li>
-      <li class="incremental">5. Currency Handling</li>
-    </ul>
-  </div>
-  
-  <div class="slide">
-    <h2>10 Key approaches</h2>
-    
-    <ul>
-      <li class="incremental">6. Use a Ledger</li>
-      <li class="incremental">7. Round</li>
-      <li class="incremental">8. System Security</li>
-      <li class="incremental">9. Data Security</li>
-      <li class="incremental">10. ?</li>
-    </ul>
+    <h1>Our Approach</h1>
   </div>
   
   <div class="slide">
@@ -221,8 +208,7 @@ end
   </div>
   
   <div class="slide">
-    <h1>3. Pessimistic Locking</h1>
-    
+    <h1>3. Stateful Locking</h1>
     <h2>Keep your hands off my task</h2>
   </div>
     
@@ -299,13 +285,17 @@ after_filter :audit_this
   </div>
   
   <div class="slide">
-    <h1>Amounts</h1>
+    <h2>Different dps</h2>
     <ul>
-      <li class="incremental">100_000.00 US Dollars</li>
-      <li class="incremental">50_000.00 British Pounds</li>
-      <li class="incremental">600_000.00 Hong Kong Dollars</li>
-      <li class="incremental">1_000_000 Korean Won</li>
+      <li class="incremental">100,000.00 US Dollars (2dp)</li>
+      <li class="incremental">108,250,041 Korean Won (0dp)</li>
+      <li class="incremental">800,390.5 Macau Pataca (1dp)</li>
+      <li class="incremental">70,900.000 Jordanian Dinar (3dp)</li>
     </ul>
+  </div>
+  
+  <div class="slide">
+    <h1>Lets not talk about Madagascar!</h1>
   </div>
   
   <div class="slide">
@@ -381,11 +371,11 @@ Late repayment fee:   100 HKD
     <h2>My Model</h2>
     <pre>
 class LoanLedger
-  property :type, String
-  property :principal_amount, BigInt
-  property :interest_amount,  BigInt
-  property :fee_amount,       BigInt
-  property :rounding,         Decimal
+  property :code,        String
+  property :principal,   BigInt
+  property :interest,    BigInt
+  property :fee,         BigInt
+  property :rounding,    Decimal
   property :description, String
 end
      </pre>
@@ -393,11 +383,25 @@ end
   
   <div class="slide">
     <h2>Classify these types</h2>
-    <p>Amount Disbursed: initial</p>
-    <p>Initial Interest: initial</p>
-    <p>Repayment: payment</p>
-    <p>Payment Failed: payment</p>
-    ...
+    <pre class="brush: ruby">
+groupy :code
+  group :creative do
+    group :initial do
+      value :principal
+      value :interest
+    end
+    value :fee
+  end
+  
+  group :collection do
+    group :payment do
+      value :repayment
+      value :manual_payment
+    end
+    value :reversal
+  end
+end
+    </pre>
   </div>
   
   <div class="slide">
@@ -405,14 +409,14 @@ end
     <pre>
 class Loan
   def total_principal
-    ledgers.initial.sum(:principal)
+    ledgers.creative.sum(:principal)
   end
   def total_interest
-    ledgers.initial.sum(:interest)
+    ledgers.creative.sum(:interest)
   end
   
   def repaid_principal
-    ledgers.payment.sum(:principal)
+    ledgers.collection.sum(:principal)
   end
   
   def outstanding_principal
@@ -426,6 +430,9 @@ end
     <h1>The Accountants were right!</h1>
   </div>
   
+  <div class="slide">
+    <img src="images/lrug_loan.png" />
+  </div>
   
   <div class="slide">
     <h1>7. Rounding</h1>
@@ -437,16 +444,16 @@ end
   </div>
   
   <div class="slide">
-    <h2>#1 - "Forget about it" Rounding</h2>
+    <h2>#1 Forgetable Rounding</h2>
     <ul>
       <li>"Your commission is X% Rounded to the nearest Dollar"</li>
       <li>Non-persistent!</li>
-      <li>Easy</li>
+      <li>No worries</li>
     </ul>
   </div>
   
   <div class="slide">
-    <h2>#2 - "Be Careful" Rounding</h2>
+    <h2>#2 Critical Rounding</h2>
     <ul>
       <li>"Interest will be added daily at X%"</li>
       <li>Persistent!</li>
@@ -466,7 +473,7 @@ end
   </div>
     
   <div class="slide">
-    <h2>A loan of 1¢, at 0.1% per day- storing rounding</h2>
+    <h2>A loan of 1¢, at 0.1% per day</h2>
     <ul>
       <li class="incremental">Day 1. 0.01 USD (0¢ rounding)</li>
       <li class="incremental">Day 2. 0.02 USD (-0.999¢ rounding)</li>
@@ -477,52 +484,334 @@ end
   
   <div class="slide">
     <h1>8. System Security</h1>
-    <h2>Other people are more clever than me</h2>
+    <h2>Trust No one</h2>
   </div>
   
   <div class="slide">
     <h2>User Permissioning</h2>
     <ul>
-      <li>Program Based Permssions</li>
-      <li>Role Based Permissions</li>
-      <li>User Based Permissions</li>
-      
-      <li>Devise</li>
-      <li>CanCan</li>
+      <li class="incremental">Program Based Permssions</li>
+      <li class="incremental">Role Based Permissions</li>
+      <li class="incremental">User Based Permissions</li>
     </ul>
   </div>
-
-  8. System Security
-
-    Let someone else do the work!
-
-    User permissioning
-    * Devise
-    * CanCan
-    * strong passwords
-
-    Firewall
-    * different IP address for SSH access
-    * whitelist IP addresses for SSH access
-    * non-standard port for SSH access
-
-    Chef
-    * creates user accounts
-    * configures SSH security (no root login, no passwords)
-    * configures Postgres security (access limited to local ips, specific users, and specific databases)
-    * only run the services we need
-
-  9. Data Security
-
-    Don't leave your laptop on the train!
-
-    If you don't have the data on your machine
-    you can't lose it.
-
-    Rules
-    * no client data outside the data centre
-    * local development uses obfuscated data
   
+  <div class="slide">
+    <h2>must_be!</h2>
+    <pre>
+class Ability
+  if user.sales_agent?
+    can :be, [:client_reader, :loan_reader]
+    can :read, Client do |client|
+      client.sales_agent_id == user.id
+    end
+  end
+  if current_user.superadmin?
+    can :be, EVERY_THING
+    can :manage, :all
+  end
+end
+
+class ClientMetricsController
+  must_be! :risk_analyst
+end
+    </pre>
+  </div>
+  
+  <div class="slide">
+    <h1>9. Server Security</h1>
+  </div>
+  
+  <div class="slide">
+    <h2>Firewall</h2>
+    <ul>
+      <li class="incremental">HTTPS only</li>
+      <li class="incremental">whitelist IPs for SSH</li>
+      <li class="incremental">non-standard port for SSH</li>
+      <li class="incremental">SSH IP is different to HTTP IP</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <h1>Chef</h1>
+    <h2 class="incremental">Consistently secure systems</h2>
+  </div>
+
+  <div class="slide">
+    <h1>9. Data Security</h1>
+    <h2>Don't trust yourself!</h2>
+  </div>
+  
+  <div class="slide">
+    <h2>"If you don't have sensitive data, you can't lose it"</h2>
+  </div>
+  
+  <div class="slide">
+    <h2>Rules</h2>
+    <ol>
+      <li class="incremental">No Client data outside the data centre</li>
+      <li class="incremental">Dev datasets are obfuscated</li>
+    </ol>
+  </div>
+  
+  <div class="slide">
+    <h2>Sensitivity?</h2>
+    <pre class="brush: ruby">
+class User
+  include Sensitivity
+
+  sensitive_field :name,
+    :type => :name
+    
+  sensitive_field :reference,
+    :type => :string
+
+  sensitive_field :bank_account_number,
+    :type => :string,
+    :value => "000-123-123123123"
+end
+
+user.to_s # &lt;User id:1 name:"Dr Who"&gt;
+user.desensitivise!
+user.to_s # &lt;User id:1 name:"Kaingiju Motogi"&gt;
+    </pre>
+  </div>
+  
+  <div class="slide">
+    <h1>That's it</h1>
+  </div>
+  
+  <div class="slide">
+    <h2>Gems I've released</h2>
+    
+    <ul>
+      <li>groupy</li>
+      <li>super_state</li>
+      <li>cashish</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <h2>Gems I should have released</h2>
+    
+    <ul>
+      <li>audit_this</li>
+      <li>sensitivity</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <h1>Come visit us in Hong Kong!</h1>
+    <h2>rubyonrailshk.com</h2>
+  </div>
+  
+  <div class="slide">
+    <h2>Stalk Me</h2>
+    <h1>@MatthewRudy</h1>
+  </div>
+  
+  <div id="background">
+    2,308,569 GNF
+    97,078.74 AUD
+    67,904.28 BRL
+    9,789,574 PYG
+    3,253,147 VUV
+    88,100.53 MVR
+    96,009.49 BGN
+    65,655.80 AMD
+    81,451.88 AED
+    1,230,251 IDR
+    14,157.52 TWD
+    5,365,071 KRW
+    38,542.05 BOB
+    29,817.11 SEK
+    44,905.50 BND
+    9,095.27 BDT
+    41,274.91 BWP
+    4,344.03 MZN
+    1,812,369 KMF
+    56,664.08 ALL
+    117.24 CZK
+    689,420.7 MOP
+    61,933.61 CHE
+    97,550.06 MNT
+    9,526,331 BIF
+    19,260.61 QAR
+    77,055.96 NAD
+    31,361.58 EUR
+    9,684,989 ISK
+    46,718.16 TJS
+    67,075.44 SZL
+    73,234.06 ZWL
+    33,718.01 CZK
+    48,855.04 XCD
+    27,342.80 LVL
+    83,688.64 RSD
+    1,682,198 VND
+    5,192.244 JOD
+    1,706,813 CVE
+    71,918.59 BWP
+    89,898.04 SGD
+    86,028.48 VEF
+    11,140.95 INR
+    53,045.25 CNY
+    64,760.29 SYP
+    97,706.14 UYU
+    93,420.80 EGP
+    24,484.92 CHE
+    4,874,043 IQD
+    47,651.58 CUC
+    39,073.84 MXN
+    53,596.70 GBP
+    78,272.65 SEK
+    250.239 TND
+    53,274.51 BAM
+    58,549.03 MYR
+    4,523,293 CLP
+    62,741.02 BMD
+    55,246.99 EUR
+    70,644.21 GBP
+    15,204.24 DZD
+    7,253,671 CLF
+    6,445.45 HKD
+    96,514.34 LTL
+    1,692,710 ZMK
+    70,983.02 PAB
+    24,914.10 BTN
+    6,815,243 IRR
+    96,966.32 BWP
+    4,585.36 GHS
+    33,107.17 UYU
+    484.742 LYD
+    4,177,846 LAK
+    2,884.08 JMD
+    5,412,077 SLL
+    85,077.84 COP
+    85,830.54 BZD
+    9,769.40 CHF
+    8,709.532 BHD
+    7,792,474 VND
+    844,255 MMK
+    49,482.75 PGK
+    43,616.00 SEK
+    59,880.12 HNL
+    57,851.50 NPR
+    7,302.34 MVR
+    3,756,135 XPF
+    47,871.29 ZWL
+    161,325 LAK
+    6,316.68 MNT
+    54,331.52 TTD
+    69,305.56 RSD
+    1,668,738 SLL
+    27,469.57 BDT
+    90,863.41 KZT
+    27,338.43 GIP
+    92,065.50 INR
+    1,977.823 KWD
+    27,996.56 PAB
+    2,910.57 MXV
+    7,891,306 IDR
+    949.279 LYD
+    4,956,695 GNF
+    13,131.93 USS
+    1,294,771 LBP
+    70,484.77 CRC
+    18,181.43 MXV
+    45,828.55 COU
+    6,241,868 KRW
+    34,051.99 DOP
+    11,623.73 INR
+    23,105.10 GMD
+    39,839.76 NGN
+    12,583.90 FKP
+    8,280,987 BYR
+    60,959.33 BWP
+    57,855.57 HKD
+    87,526.34 BOV
+    9,294,135 BIF
+    11,371.95 SRD
+    55,485.01 EUR
+    27,461.86 CNY
+    44,481.48 USD
+    82,708.18 ANG
+    5,144,910 KPW
+    76,251.37 NAD
+    89,816.66 ZWL
+    44,433.67 BDT
+    4,684,258 XPF
+    65,842.60 TOP
+    68,392.77 MVR
+    91,643.97 AZN
+    99,856.70 TOP
+    895,390 BIF
+    40,863.21 DKK
+    56,017.92 MKD
+    98,861.96 CHF
+    89,698.88 BGN
+    23,996.80 GTQ
+    47,468.71 BOB
+    35,351.21 THB
+    13,925.79 CHE
+    59,665.59 PEN
+    89,478.08 BOB
+    98,860.79 PEN
+    27,492.02 NGN
+    9,417,120 UGX
+    45,346.47 BMD
+    34,208.66 AED
+    25,608.43 KYD
+    7,802.729 OMR
+    71,488.19 PHP
+    36,460.48 TZS
+    304,445 LBP
+    94,005.93 ANG
+    17,774.08 LRD
+    5,061,194 PYG
+    1,794.972 LYD
+    16,119.02 BDT
+    95,367.29 PLN
+    36,272.24 PGK
+    78,010.14 KES
+    58,306.30 ANG
+    6,868.15 ZWL
+    5,382,141 JPY
+    31,855.17 HNL
+    82,692.68 LTL
+    5,265.65 MZN
+    72,138.02 ZAR
+    34,904.74 WST
+    2,779,417 VUV
+    8,381,522 CVE
+    8,100,430 PYG
+    80,534.80 CHW
+    82,818.83 VEF
+    4,074.14 NOK
+    40,724.72 LSL
+    8,668,690 DJF
+    4,912,756 CVE
+    10,001.97 HTG
+    45,087.82 JMD
+    7,913.718 JOD
+    2,170,295 XOF
+    13,463.99 QAR
+    8,055,120 IDR
+    88,615.61 CAD
+    32,840.48 FJD
+    6,481,131 YER
+    20,029.03 GYD
+    47,339.88 INR
+    79,398.96 BBD
+    1,798.44 BOB
+    13,052.70 TZS
+    77,959.52 UAH
+    45,642.17 PEN
+    25,772.42 CRC
+    5,805,381 XPF
+    2,660,501 KMF
+    9,163.624 LYD
+    16,449.10 GTQ
+  </div>
 	
 </body>
 </html>
