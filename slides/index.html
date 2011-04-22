@@ -29,6 +29,9 @@
 	  h1 {
 	    font-size : 2.5em;
 	  }
+	  li {
+	    padding : 0.5em 0;
+	  }
 	</style>
 
 	<!-- Slippy init code -->
@@ -103,7 +106,7 @@
   
   
   <div class="slide">
-    <h1>10 Key approaches</h1>
+    <h2>10 Key approaches</h2>
     
     <ul>
       <li class="incremental">1. Data Integrity</li>
@@ -115,7 +118,7 @@
   </div>
   
   <div class="slide">
-    <h1>10 Key approaches</h1>
+    <h2>10 Key approaches</h2>
     
     <ul>
       <li class="incremental">6. Use a Ledger</li>
@@ -138,11 +141,18 @@
   
   <div class="slide">
     <h1>2. State Machines</h1>
-   
   </div>
   <div class="slide"> 
     <h2>Everything is a process</h2>
-    <br/>
+    <ul>
+      <li class="incremental">A loan must only be disbursed once!</li>
+      <li class="incremental">A payment must only be made once!</li>
+      <li class="incremental">We must only refund someone once!</li>
+    </ul>
+  </div> 
+   
+  <div class="slide">
+    <h2>Common Approach</h2>
     <pre class="brush: ruby">
 class SomeProcess < ActiveRecord::Base
   super_state :pending, :initial => true
@@ -154,14 +164,6 @@ class SomeProcess < ActiveRecord::Base
     ["pending", "processing"]
 end
     </pre>
-  </div>
-  
-  <div class="slide">
-    <ul>
-      <li class="incremental">A loan must only be disbursed once!</li>
-      <li class="incremental">A payment must only be made once!</li>
-      <li class="incremental">We must only refund someone once!</li>
-    </ul>
   </div>
   
   <div class="slide">
@@ -191,65 +193,43 @@ class SomeProcess < ActiveRecord::Base
 end
     </pre>
   </div>
-  <h2>If something goes wrong,
-      I made a mistake,
-      I need to fix it
-  <ul>
-      <li class="incremental">Foreign Keys</li>
-      <li class="incremental">CHECK constraints</li>
-      <li class="incremental">P</li>
-      <li class="incremental">9. Data Security</li>
-      <li class="incremental">10. ?</li>
+  
+  <div class="slide">
+    <h1>Workflow</h1>
+    <ul>
+      <li class="incremental">Lock it!</li>
+      <li class="incremental">Change the state!</li>
+      <li class="incremental">Do your work!</li>
     </ul>
   </div>
+
+  <div class="slide">
+    <h1>4. Audit Everything</h1>
+  </div>
   
-
-  3. Pessimistic Locking
-
-    If something goes wrong
-    I f**ked up
-    I need to fix it
-
-    class SomeProcess < ActiveRecord::Base
-      # kick of the process
-      state_transition :start_processing, :pending => :processing
-
-      # finish it off
-      state_transition :complete_processing, :processing => :completed
-
-      def process!
-        ensure_super_state!(:pending) do
-          self.start_processing!
-        end
-
-        # do our stuff
-
-        complete_processing!
-      end
-    end
-
-
-  4. Audit
-
-    We need to know who did what
-    and when
-
-    def audit_this!
-      ActionAudit.audit!(
-        :ip => request.remote_ip,
-        :controller => params[:controller],
-        :action     => params[:action],
-        :params     => request.filtered_parameters,
-        :flash      => flash,
-        :status     => status,
-        :http_verb  => request.request_method,
-        :user       => current_user
-        )
-    rescue Exception => e
-      logger.error("Auditing is broken: #{e.message}")
-    end
-
-    after_filter :audit_this
+  <div class="slide">
+    <h2>We need to know who did what and when</h2>
+  </div>
+  
+  <div class="slide">
+    <pre class="brush: ruby">
+def audit_this!
+  ActionAudit.audit!(
+    :ip => request.remote_ip,
+    :controller => params[:controller],
+    :action     => params[:action],
+    :params     => request.filtered_parameters,
+    :flash      => flash,
+    :status     => status,
+    :http_verb  => request.request_method,
+    :user       => current_user
+    )
+rescue Exception => e
+  logger.error("Auditing is broken: #{e.message}")
+end
+after_filter :audit_this
+    </pre>
+  </div>
 
   5. Currency
 
