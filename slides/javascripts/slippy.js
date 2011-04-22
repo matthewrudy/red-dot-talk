@@ -90,7 +90,7 @@
         resizeAll = function() {
             calc();
 
-            $('body').css('fontSize', smallestDimension/42);
+            $('body').css('fontSize', smallestDimension/options.widthInCharacters);
             slides.height(slideH)
                 .width(slideW)
                 .css('marginTop', -slideH/2)
@@ -427,7 +427,9 @@
             // width/height ratio of the slides, defaults to 1.3 (620x476)
             ratio: 1.3,
             incrementalBefore: null,
-            incrementalAfter: null
+            incrementalAfter: null,
+            
+            widthInCharacters: 42
         };
 
         options = $.extend(defaults, settings);
