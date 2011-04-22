@@ -78,8 +78,10 @@
 	
 	<div class="slide">
     <h1>Why is finance different?</h1>
-    <h2 class="incremental">Surely its just building internal apps</h2>
-    <h2 class="incremental">Isn't that boring?</h2>
+    <ul>
+      <li class="incremental">Surely its just building internal apps</li>
+      <li class="incremental">Isn't that boring?</li>
+    </ul>
   </div>
   
   <div class="slide">
@@ -87,7 +89,38 @@
   </div>
   
   <div class="slide">
-    <h1>Key differences</h1>
+    <h1>Our Client</h1>
+    <h2>Advanced-Pay.com</h2>
+    <p>"Lending against credit card receivables"</p>
+  </div>
+  
+  <div class="slide">
+    <h2>Risk Analysis</h2>
+    <ul>
+      <li class="incremental">6 months credit card statements</li>
+      <li class="incremental">We analyse them</li>
+      <li class="incremental">Are they going to go bust?</li>
+      <li class="incremental">How much can they afford to pay daily?</li>
+      <li class="incremental">Derive a credit limit</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <h2>Loan Management</h2>
+    <ul>
+      <li class="incremental">Approve and Disburse Loans</li>
+      <li class="incremental">Take Daily Repayments</li>
+      <li class="incremental">Monthly PDF Statements</li>
+      <li class="incremental">Ongoing Risk Analysis</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <img src="images/model-diagram.png" />
+  </div>
+  
+  <div class="slide">
+    <h1>Key features</h1>
     <ul>
       <li class="incremental">Small User Base</li>
       <li class="incremental">Function over Form</li>
@@ -290,11 +323,111 @@ after_filter :audit_this
 => 1,000,000 KRW
     </pre>
   </div>
+  
+  <div class="slide">
+    <h1>6. Ledgers</h1>
+    <h2>Them things accountants use</h2>
+  </div>
+  
+  <div class="slide">
+    <h1>What is a loan?</h1>
+    <ul>
+      <li class="incremental">A Principal</li>
+      <li class="incremental">Some Interest</li>
+      <li class="incremental">Daily Amount</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <h2>Plus a load more s**t</h2>
+    <ul>
+      <li>Payment Requests</li>
+      <li>Payment Failures</li>
+      <li>Fees</li>
+      <li>Early Payments</li>
+      <li>Top Ups</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <h1>Each of these is a mixture of</h1>
+    <ul>
+      <li class="incremental">Principal</li>
+      <li class="incremental">Interest</li>
+      <li class="incremental">Fees</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <h1>Try it OO</h1>
+    <h2>It gets messy very quickly</h2>
+  </div>
+  
+  <div class="slide">
+    <h2>Make the loan look like the Statement</h2>
+    <pre>
+Amount Disbursed: 100,000 HKD
+Initial Interest:  15,000 HKD
+Repayment:         -1,000 HKD
+Repayment:         -1,000 HKD
+Payment Failed:     1,000 HKD
+Late repayment fee:   100 HKD
+    </pre>
+  </div>
 
-    We have to store it as an Integer.
-
-    Integer plus Currency Code.
-
+  <div class="slide">
+    <h2>My Model</h2>
+    <pre>
+class LoanLedger
+  property :type, String
+  property :principal_amount, BigInt
+  property :interest_amount,  BigInt
+  property :fee_amount,       BigInt
+  property :rounding,         Decimal
+  property :description, String
+end
+     </pre>
+  </div>
+  
+  <div class="slide">
+    <h2>Classify these types</h2>
+    <p>Amount Disbursed: initial</p>
+    <p>Initial Interest: initial</p>
+    <p>Repayment: payment</p>
+    <p>Payment Failed: payment</p>
+    ...
+  </div>
+  
+  <div class="slide">
+    <h2>Sum over these Classifications</h2>
+    <pre>
+class Loan
+  def total_principal
+    ledgers.initial.sum(:principal)
+  end
+  def total_interest
+    ledgers.initial.sum(:interest)
+  end
+  
+  def repaid_principal
+    ledgers.payment.sum(:principal)
+  end
+  
+  def outstanding_principal
+    ledgers.sum(:principal)
+  end
+end
+    </pre>
+  </div>
+  
+  <div class="slide">
+    <h1>The Accountants were right!</h1>
+  </div>
+  
+  
+  <div class="slide">
+    <h1>7. Rounding</h1>
+  </div>
   7. Rounding
 
     (picture from that film)
