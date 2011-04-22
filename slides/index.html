@@ -148,20 +148,32 @@
   
   <div class="slide">
     <h1>2. State Machines</h1>
-  </div>
-  <div class="slide"> 
     <h2>Everything is a process</h2>
+  </div>
+  
+  <div class="slide"> 
+    <h2>Loan Lifecyle</h2>
     <ul>
-      <li class="incremental">A loan must only be disbursed once!</li>
-      <li class="incremental">A payment must only be made once!</li>
-      <li class="incremental">We must only refund someone once!</li>
+      <li class="incremental">Requested</li>
+      <li class="incremental">Approved (for an amount)</li>
+      <li class="incremental">Disbursed</li>
+      <li class="incremental">Paid Off</li>
     </ul>
-  </div> 
+  </div>
+  
+  <div class="slide"> 
+    <h2>Task Lifecyle</h2>
+    <ul>
+      <li class="incremental">Created</li>
+      <li class="incremental">Started Processing</li>
+      <li class="incremental">Finished Processing</li>
+    </ul>
+  </div>
    
   <div class="slide">
     <h2>Common Approach</h2>
     <pre class="brush: ruby">
-class SomeProcess < ActiveRecord::Base
+class SomeTask < ActiveRecord::Base
   super_state :pending, :initial => true
   super_state :processing
   super_state :completed
@@ -181,7 +193,7 @@ end
     
   <div class="slide">
     <pre>
-class SomeProcess < ActiveRecord::Base
+class SomeTask < ActiveRecord::Base
   # kick of the process
   state_transition :start_processing,
     :pending => :processing
@@ -245,16 +257,39 @@ end
 after_filter :audit_this
     </pre>
   </div>
+  
+  <div class="slide">
+    <h1>5. Currency</h1>
+    <h2>Floats, Decimals, or Integers?</h2>
+  </div>
+  
+  <div class="slide">
+    <h1>Amounts</h1>
+    <ul>
+      <li class="incremental">100_000.00 US Dollars</li>
+      <li class="incremental">50_000.00 British Pounds</li>
+      <li class="incremental">600_000.00 Hong Kong Dollars</li>
+      <li class="incremental">1_000_000 Korean Won</li>
+    </ul>
+  </div>
+  
+  <div class="slide">
+    <h1>Use Integers!</h1>
+  </div>
+  
+  <div class="slide">
+    <h1>Cashish</h1>
+    <pre class="brush: ruby">
+>> Cashish::Amount.new(100_000_00, "USD")
+=> 100,000.00 USD
 
-  5. Currency
+>> Cashish::Amount.new(50_000_00, "GBP")
+=> 50,000.00 GBP
 
-    Do we store as Float, Decimal, or Integer?
-
-    100_000.00 US Dollars
-     50_000.00 British Pounds
-    600_000.00 Hong Kong Dollars
-
-     1_000_000  Korean Won?
+>> Cashish::Amount.new(1_000_000, "KRW")
+=> 1,000,000 KRW
+    </pre>
+  </div>
 
     We have to store it as an Integer.
 
