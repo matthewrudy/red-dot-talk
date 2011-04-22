@@ -427,10 +427,46 @@ end
   
   <div class="slide">
     <h1>7. Rounding</h1>
+    <h2>Get Rich Quick</h2>
   </div>
-  7. Rounding
-
-    (picture from that film)
+  
+  <div class="slide">
+    <h1>Two types of rounding</h1>
+  </div>
+  
+  <div class="slide">
+    <h2>#1 - Non-balanceable Rounding</h2>
+    <p>"Your commission is X% Rounded to the nearest Dollar"</p>
+    <p>Non-persistent!</p>
+    <p>Easy</p>
+  </div>
+  
+  <div class="slide">
+    <h2>#2 - Balanceable Rounding</h2>
+    <p>"Interest will be added daily at X%"</p>
+    <p>Persistent!</p>
+    <p>Difficult</p>
+  </div>
+  
+  <div class="slide">
+    <h2>A loan of 1¢, at 0.1% per day</h2>
+    <ul>
+      <li class="incremental">Day 1. 0.01 USD</li>
+      <li class="incremental">Day 2. 0.02 USD</li>
+      <li class="incremental">Day 3. 0.03 USD</li>
+    </ul>
+    <h2 class="incremental">100% a day</h2>
+  </div>
+    
+  <div class="slide">
+    <h2>A loan of 1¢, at 0.1% per day- storing rounding</h2>
+    <ul>
+      <li class="incremental">Day 1. 0.01 USD (0¢ rounding)</li>
+      <li class="incremental">Day 2. 0.02 USD (-0.999¢ rounding)</li>
+      <li class="incremental">Day 3. 0.02 USD (-0.998¢ rounding)</li>
+    </ul>
+    <h2 class="incremental">0.1% a day</h2>
+  </div>
 
   8. System Security
 
