@@ -29,6 +29,9 @@
 	  .slide pre.big {
 	    font-size : 1.0em;
 	  }
+	  .slide pre.smaller {
+	    font-size : 0.5em;
+	  }
 	  h1 {
 	    font-size : 2.5em;
 	  }
@@ -63,7 +66,8 @@
 	</div>
 	
 	<div class="slide">
-	  <h1>I'm not a Pivot!</h1>
+	  <h1>I don't work at Pivotal Labs</h1>
+
 	</div>
 	
 	<div class="slide">
@@ -115,6 +119,7 @@
   </div>
   
   <div class="slide">
+    <h2>Our Models</h2>
     <img src="images/model-diagram.png" />
   </div>
   
@@ -159,26 +164,26 @@
     </ul>
   </div>
   
-  <div class="slide"> 
-    <h2>Task Lifecyle</h2>
-    <ul>
-      <li>Created</li>
-      <li>Started Processing</li>
-      <li>Finished Processing</li>
-    </ul>
-  </div>
-   
   <div class="slide">
-    <h2>Common Approach</h2>
-    <pre class="brush: ruby">
-class SomeTask < ActiveRecord::Base
-  super_state :pending, :initial => true
-  super_state :processing
-  super_state :completed
-  super_state :failed
+    <h2>The Loan</h2>
+    <pre class="brush: ruby smaller">
+class Loan < ActiveRecord::Base
 
-  super_state_group :outstanding,
-    ["pending", "processing"]
+  super_state :requested, :initial => true
+  super_state :approved
+  super_state :disbursed
+  super_state :completed
+  
+  state_transition(:approve, :requested => :approved) do |params|
+    self.approved_amount      = params[:amount]
+    self.interest_rate        = params[:interest_rate]
+  end
+  
+  state_transition(:disburse, :approved => :disbursed) do |params|
+    self.disbursed_amount        = params[:amount]
+    self.number_of_repayments    = params[:number_of_repayments]
+    self.number_of_days_interest = params[:number_of_days_interest]
+  end
 end
     </pre>
   </div>
@@ -189,8 +194,9 @@ end
   </div>
     
   <div class="slide">
+    <h2>Common Transitions</h2>
     <pre>
-class SomeTask < ActiveRecord::Base
+class SomeTask
   # kick of the process
   state_transition :start_processing,
     :pending => :processing
@@ -226,6 +232,7 @@ end
     <ul>
       <li>Something unexpected has happened</li>
       <li>We need to fix it manually</li>
+      <li>No Retries</li>
     </ul>
   </div>
 
@@ -235,7 +242,7 @@ end
   </div>
   
   <div class="slide">
-    <h2>Just do it</h2>
+    <h2>AuditThis?</h2>
     <pre class="brush: ruby">
 def audit_this!
   ActionAudit.audit!(
@@ -263,15 +270,16 @@ after_filter :audit_this
   <div class="slide">
     <h2>Different dps</h2>
     <ul>
-      <li>100,000.00 US Dollars (2dp)</li>
-      <li>108,250,041 Korean Won (0dp)</li>
-      <li>800,390.5 Macau Pataca (1dp)</li>
-      <li>70,900.000 Jordanian Dinar (3dp)</li>
+      <li class="incremental">100,000.00 US Dollars (2dp)</li>
+      <li class="incremental">108,250,041 Korean Won (0dp)</li>
+      <li class="incremental">800,390.5 Macau Pataca (1dp)</li>
+      <li class="incremental">70,900.000 Jordanian Dinar (3dp)</li>
     </ul>
   </div>
   
   <div class="slide">
     <h1>Lets not talk about Madagascar!</h1>
+    <h2 class="incremental">5 "cents" to the "dollar"</h2>
   </div>
   
   <div class="slide">
@@ -307,7 +315,7 @@ after_filter :audit_this
   </div>
   
   <div class="slide">
-    <h2>Plus a load more s**t</h2>
+    <h2>Plus a load more</h2>
     <ul>
       <li>Payment Requests</li>
       <li>Payment Failures</li>
@@ -346,13 +354,19 @@ Late repayment fee:   100 HKD
   <div class="slide">
     <h2>My Model</h2>
     <pre class="big">
-class LoanLedger
-  property :code,        String
-  property :principal,   BigInt
-  property :interest,    BigInt
-  property :fee,         BigInt
-  property :rounding,    Decimal
-  property :description, String
+create_table :loan_ledgers do |t|
+  # classify it
+  t.string :code 
+  
+  # the amounts
+  t.integer :principal
+  t.integer :interest
+  t.integer :fee
+  
+  t.decimal :rounding
+  
+  # for humans
+  t.string :description
 end
      </pre>
   </div>
