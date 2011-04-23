@@ -26,8 +26,14 @@
 	  .slide pre {
 	    font-size : 0.7em;
 	  }
+	  .slide pre.big {
+	    font-size : 1.0em;
+	  }
 	  h1 {
 	    font-size : 2.5em;
+	  }
+	  h1.extra {
+	    font-size : 3.5em;
 	  }
 	  li {
 	    padding : 0.5em 0;
@@ -52,12 +58,8 @@
 	</div>
 	
 	<div class="slide">
-	  <h1>Who Am I?</h1>
-	  <ul>
-	    <li class="incremental">Matthew Rudy Jacobs</li>
-	    <li class="incremental">马泰</li>
-	    <li class="incremental">@MatthewRudy</li>
-	  </ul>
+	  <h1 class="extra">马泰</h1>
+	  <h1>Matthew Rudy Jacobs</h1>
 	</div>
 	
 	<div class="slide">
@@ -67,75 +69,53 @@
 	<div class="slide">
 	  <h1>Thought Sauce</h1>
 	  <ul>
-	    <li class="incremental">Fledgling Consultancy in HK</li>
-	    <li class="incremental">We need more people!</li>
-	    <li class="incremental">And we need more work!</li>
+	    <li>Consultancy in HK</li>
+	    <li>We need people!</li>
+	    <li>We need work!</li>
 	  </ul>
 	</div>
-	
-	<div class="slide">
-	  <h1>The Talk</h1>
-	</div>
-	
-	<div class="slide">
-    <h1>Why is finance different?</h1>
-    <ul>
-      <li class="incremental">Surely its just building internal apps</li>
-      <li class="incremental">Isn't that boring?</li>
-    </ul>
-  </div>
   
   <div class="slide">
-    <h1>Yes</h1>
-  </div>
-  
-  <div class="slide">
-    <h1>Our Client</h1>
     <h2>Advanced-Pay.com</h2>
-    <p>"Lending against credit card receivables"</p>
+    <h2>"Lending against credit card receivables"</h2>
+    <img src="images/amp.png" />
   </div>
   
   <div class="slide">
     <h2>We lend money</h2>
     <ul>
-      <li class="incremental">to small businesses</li>
-      <li class="incremental">with proven cash flow</li>
+      <li>to small businesses</li>
+      <li>with proven cash flow</li>
     </ul>
-    <h2 class="incremental">We take daily payments</h2>
+    <h2>We take daily payments</h2>
+    <ul>
+      <li>via Direct Debit</li>
+    </ul>
   </div>
   
   <div class="slide">
     <h2>Risk Analysis</h2>
     <ul>
-      <li class="incremental">6 months credit card statements</li>
-      <li class="incremental">We analyse them</li>
-      <li class="incremental">Are they going to go bust?</li>
-      <li class="incremental">How much can they afford to pay daily?</li>
-      <li class="incremental">Derive a credit limit</li>
+      <li>6 months credit card statements</li>
+      <li>We analyse them</li>
+      <li>Are they going to go bust?</li>
+      <li>How much can they afford to pay daily?</li>
+      <li>Derive a credit limit</li>
     </ul>
   </div>
   
   <div class="slide">
     <h2>Loan Management</h2>
     <ul>
-      <li class="incremental">Approve and Disburse Loans</li>
-      <li class="incremental">Take Daily Repayments</li>
-      <li class="incremental">Monthly PDF Statements</li>
-      <li class="incremental">Ongoing Risk Analysis</li>
+      <li>Approve and Disburse Loans</li>
+      <li>Take Daily Repayments</li>
+      <li>Monthly PDF Statements</li>
+      <li>Ongoing Risk Analysis</li>
     </ul>
   </div>
   
   <div class="slide">
     <img src="images/model-diagram.png" />
-  </div>
-  
-  <div class="slide">
-    <h1>Key features</h1>
-    <ul>
-      <li class="incremental">Small User Base</li>
-      <li class="incremental">Its all about numbers</li>
-      <li class="incremental">No f**k ups</li>
-    </ul>
   </div>
   
   <div class="slide">
@@ -150,22 +130,18 @@
   <div class="slide">
     <h1>Foreign Keys</h1>
     
-    <p class="incremental">If Direct Debit Request 45623 doesn't exist, something has gone wrong!</p>
+    <p>If Direct Debit Request 45623 doesn't exist, something has gone wrong!</p>
   </div>
   
   <div class="slide">
     <h1>Unique Indexes</h1>
     
-    <p class="incremental">There can only be one "disbursed" Loan per client</p>
+    <p>There can only be one "disbursed" Loan per client</p>
   </div>
   
   <div class="slide">
-    <h2>I'd like to say</h2>
-    <ul>
-      <li class="incremental">CHECK constraints</li>
-      <li class="incremental">Partial Indexes</li>
-    </ul>
-    <p class="incremental">But these get in the way</p>
+    <h1><strike>CHECK constraints</strike></h1>
+    <p>Too much hassle</p>
   </div>
   
   <div class="slide">
@@ -176,19 +152,19 @@
   <div class="slide"> 
     <h2>Loan Lifecyle</h2>
     <ul>
-      <li class="incremental">Requested</li>
-      <li class="incremental">Approved (for an amount)</li>
-      <li class="incremental">Disbursed</li>
-      <li class="incremental">Paid Off</li>
+      <li>Requested</li>
+      <li>Approved (for an amount)</li>
+      <li>Disbursed</li>
+      <li>Paid Off</li>
     </ul>
   </div>
   
   <div class="slide"> 
     <h2>Task Lifecyle</h2>
     <ul>
-      <li class="incremental">Created</li>
-      <li class="incremental">Started Processing</li>
-      <li class="incremental">Finished Processing</li>
+      <li>Created</li>
+      <li>Started Processing</li>
+      <li>Finished Processing</li>
     </ul>
   </div>
    
@@ -239,17 +215,17 @@ end
   <div class="slide">
     <h1>Workflow</h1>
     <ul>
-      <li class="incremental">Lock it!</li>
-      <li class="incremental">Change the state!</li>
-      <li class="incremental">Do your work!</li>
+      <li>Lock it!</li>
+      <li>Change the state!</li>
+      <li>Do your work!</li>
     </ul>
   </div>
   
   <div class="slide">
     <h1>If it fails?</h1>
     <ul>
-      <li class="incremental">Something unexpected has happened</li>
-      <li class="incremental">We need to fix it manually</li>
+      <li>Something unexpected has happened</li>
+      <li>We need to fix it manually</li>
     </ul>
   </div>
 
@@ -287,10 +263,10 @@ after_filter :audit_this
   <div class="slide">
     <h2>Different dps</h2>
     <ul>
-      <li class="incremental">100,000.00 US Dollars (2dp)</li>
-      <li class="incremental">108,250,041 Korean Won (0dp)</li>
-      <li class="incremental">800,390.5 Macau Pataca (1dp)</li>
-      <li class="incremental">70,900.000 Jordanian Dinar (3dp)</li>
+      <li>100,000.00 US Dollars (2dp)</li>
+      <li>108,250,041 Korean Won (0dp)</li>
+      <li>800,390.5 Macau Pataca (1dp)</li>
+      <li>70,900.000 Jordanian Dinar (3dp)</li>
     </ul>
   </div>
   
@@ -324,9 +300,9 @@ after_filter :audit_this
   <div class="slide">
     <h1>What is a loan?</h1>
     <ul>
-      <li class="incremental">A Principal</li>
-      <li class="incremental">Some Interest</li>
-      <li class="incremental">Daily Amount</li>
+      <li>A Principal</li>
+      <li>Some Interest</li>
+      <li>Daily Amount</li>
     </ul>
   </div>
   
@@ -344,9 +320,9 @@ after_filter :audit_this
   <div class="slide">
     <h1>Each of these is a mixture of</h1>
     <ul>
-      <li class="incremental">Principal</li>
-      <li class="incremental">Interest</li>
-      <li class="incremental">Fees</li>
+      <li>Principal</li>
+      <li>Interest</li>
+      <li>Fees</li>
     </ul>
   </div>
   
@@ -357,7 +333,7 @@ after_filter :audit_this
   
   <div class="slide">
     <h2>Make the loan look like the Statement</h2>
-    <pre>
+    <pre class="big">
 Amount Disbursed: 100,000 HKD
 Initial Interest:  15,000 HKD
 Repayment:         -1,000 HKD
@@ -369,7 +345,7 @@ Late repayment fee:   100 HKD
 
   <div class="slide">
     <h2>My Model</h2>
-    <pre>
+    <pre class="big">
 class LoanLedger
   property :code,        String
   property :principal,   BigInt
@@ -490,9 +466,9 @@ end
   <div class="slide">
     <h2>User Permissioning</h2>
     <ul>
-      <li class="incremental">Program Based Permssions</li>
-      <li class="incremental">Role Based Permissions</li>
-      <li class="incremental">User Based Permissions</li>
+      <li>Program Based Permssions</li>
+      <li>Role Based Permissions</li>
+      <li>User Based Permissions</li>
     </ul>
   </div>
   
@@ -525,32 +501,28 @@ end
   <div class="slide">
     <h2>Firewall</h2>
     <ul>
-      <li class="incremental">HTTPS only</li>
-      <li class="incremental">whitelist IPs for SSH</li>
-      <li class="incremental">non-standard port for SSH</li>
-      <li class="incremental">SSH IP is different to HTTP IP</li>
+      <li>HTTPS only</li>
+      <li>whitelist IPs for SSH</li>
+      <li>non-standard port for SSH</li>
+      <li>SSH IP is different to HTTP IP</li>
     </ul>
   </div>
   
   <div class="slide">
     <h1>Chef</h1>
-    <h2 class="incremental">Consistently secure systems</h2>
+    <h2>Consistently secure systems</h2>
   </div>
 
   <div class="slide">
-    <h1>9. Data Security</h1>
-    <h2>Don't trust yourself!</h2>
-  </div>
-  
-  <div class="slide">
+    <h1>10. Data Security</h1>
     <h2>"If you don't have sensitive data, you can't lose it"</h2>
   </div>
   
   <div class="slide">
     <h2>Rules</h2>
     <ol>
-      <li class="incremental">No Client data outside the data centre</li>
-      <li class="incremental">Dev datasets are obfuscated</li>
+      <li>No Client data outside the data centre</li>
+      <li>Dev datasets are obfuscated</li>
     </ol>
   </div>
   
@@ -582,32 +554,17 @@ user.to_s # &lt;User id:1 name:"Kaingiju Motogi"&gt;
   </div>
   
   <div class="slide">
-    <h2>Gems I've released</h2>
-    
-    <ul>
-      <li>groupy</li>
-      <li>super_state</li>
-      <li>cashish</li>
-    </ul>
-  </div>
-  
-  <div class="slide">
-    <h2>Gems I should have released</h2>
-    
-    <ul>
-      <li>audit_this</li>
-      <li>sensitivity</li>
-    </ul>
-  </div>
-  
-  <div class="slide">
     <h1>Come visit us in Hong Kong!</h1>
-    <h2>rubyonrailshk.com</h2>
+    <h2>HKROR Google Group</h2>
   </div>
   
   <div class="slide">
-    <h2>Stalk Me</h2>
+    <h1>Hong Kong Ruby Camp in October?</h1>
+  </div>
+  
+  <div class="slide">
     <h1>@MatthewRudy</h1>
+    <h2>Stalk Me</h2>
   </div>
   
   <div id="background">
